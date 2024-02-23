@@ -18,6 +18,7 @@ L=10000; TRANS=5000;                                                   # integra
 
 b=0.45;
 MOD_par=[-1 -1 1 a b -c 1];                                            # parameters
+# DO NOT FORGET: "chmod +x i_ODE_general_BIG" in linux!
 X = integrate_ODE_general_BIG(MOD_nr,MOD_par,dt,
                               L,DIM,ODEorder,X0,TRANS);                # integrate system
                                                                        # function defined in DDAfunctions.jl
