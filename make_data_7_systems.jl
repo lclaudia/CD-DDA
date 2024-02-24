@@ -96,7 +96,7 @@ X = X[1:2:end,1:3:end];                                                # take ev
                                                                        #   and only u_{1,n}
 
 
-SG = plot(layout = (3,7),size=(2100,800));                             # make plot of deley embeddings
+SG = plot(layout = (3,7),size=(2100,800));                             # make plot of delay embeddings
 for k1=1:3
     for k2=1:7
         plot!(SG,subplot=(k1-1)*7+k2,
@@ -124,7 +124,7 @@ for k=1:size(X,2)                                                      # add noi
     Y[:,k]=add_noise(Y[:,k],SNR); 
 end
 
-SG = plot(layout = (3,7),size=(2100,800));                             # make plot
+SG = plot(layout = (3,7),size=(2100,800));                             # make plot of delay embeddings
 for k1=1:3
     for k2=1:7
         plot!(SG,subplot=(k1-1)*7+k2,
