@@ -79,8 +79,9 @@ Y=integrate_ODE_general_BIG([MOD_nr I2],[MOD_par MOD_par_add_23],      # encodin
                             DIM*NrSyst,ODEorder,X0,                    # parameters
                             0);                                        # no transient
 
-X0=Y[end,:];                                                           # initial conditions for (iii)
 X=[X; Y];                                                              # concatenate (i) and (ii)
+Y = nothing; GC.gc();                                                  # clear variable Y
+X0=X[end,:];                                                           # initial conditions for (iii)
 
 Y=integrate_ODE_general_BIG([MOD_nr I3],[MOD_par MOD_par_add_23],      # encoding of the coupled systems (iii)
                             dt,                                        # step size of num. integration
@@ -89,9 +90,24 @@ Y=integrate_ODE_general_BIG([MOD_nr I3],[MOD_par MOD_par_add_23],      # encodin
                             0);                                        # no transient
 
 X=[X;Y];                                                               # concatenate (i), (ii), and (iii)
+Y = nothing; GC.gc();                                                  # clear variable Y
 
-X = X[1:2:end,:];                                                      # take every second data point
+X = X[1:2:end,1:3:end];                                                # take every second data point 
+                                                                       #   and only u_{1,n}
 
+
+SG = plot(layout = (3,7),size=(2100,800));                             # make plot of deley embeddings
+for k1=1:3
+    for k2=1:7
+        plot!(SG,subplot=(k1-1)*7+k2,
+              X[((20000:24000) .+ (k1-1)*L2),k2],
+              X[((20000:24000) .+ (k1-1)*L2) .- 10,k2],
+              legend=false
+             )
+        end
+    end
+display(SG)
+savefig("Roessler_7syst_NoNoise.pdf")
 
 FN="CD_DDA_data_NoNoise.ascii";                                        # noise free data file
 writedlm(FN, map(number_to_string, X),' '); 
@@ -108,5 +124,21 @@ for k=1:size(X,2)                                                      # add noi
     Y[:,k]=add_noise(Y[:,k],SNR); 
 end
 
+SG = plot(layout = (3,7),size=(2100,800));                             # make plot
+for k1=1:3
+    for k2=1:7
+        plot!(SG,subplot=(k1-1)*7+k2,
+              Y[((20000:24000) .+ (k1-1)*L2),k2],
+              Y[((20000:24000) .+ (k1-1)*L2) .- 10,k2],
+              legend=false
+             )
+        end
+    end
+display(SG)
+savefig("Roessler_7syst_15dB.pdf")
+
 FN="CD_DDA_data_15dB.ascii";  
 writedlm(FN, map(number_to_string, Y),' ');                            # save data 
+
+Y = nothing; GC.gc();
+X = nothing; GC.gc();
