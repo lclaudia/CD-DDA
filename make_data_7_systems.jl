@@ -55,7 +55,7 @@ MOD_par_add_23=[epsilon -epsilon epsilon -epsilon epsilon -epsilon];   # MOD_par
 TAU=[32 9]; TM=maximum(TAU); dm=4;                                     # DDA parameters
 WL=2000;WS=500; 
 
-WN=100;                                                                # assign window number for each case
+WN=500;                                                                # assign window number for each case
 L1=WS*(WN-1)+WL+TM+dm;                                                 # ajust integration length to have 
 L2=WS*WN;                                                              # equal number of windows for each case
 L3=WS*WN+dm;
@@ -100,8 +100,8 @@ SG = plot(layout = (3,7),size=(2100,800));                             # make pl
 for k1=1:3
     for k2=1:7
         plot!(SG,subplot=(k1-1)*7+k2,
-              X[((20000:24000) .+ (k1-1)*L2),k2],
-              X[((20000:24000) .+ (k1-1)*L2) .- 10,k2],
+              X[((50000:54000) .+ (k1-1)*L2),k2],
+              X[((50000:54000) .+ (k1-1)*L2) .- 10,k2],
               legend=false
              )
         end
@@ -128,8 +128,8 @@ SG = plot(layout = (3,7),size=(2100,800));                             # make pl
 for k1=1:3
     for k2=1:7
         plot!(SG,subplot=(k1-1)*7+k2,
-              Y[((20000:24000) .+ (k1-1)*L2),k2],
-              Y[((20000:24000) .+ (k1-1)*L2) .- 10,k2],
+              Y[((50000:54000) .+ (k1-1)*L2),k2],
+              Y[((50000:54000) .+ (k1-1)*L2) .- 10,k2],
               legend=false
              )
         end
