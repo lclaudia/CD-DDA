@@ -1,4 +1,7 @@
-include("DDAfunctions.jl");                                           # set of Julia functions
+#include("DDAfunctions.jl");                                            # set of Julia functions
+#
+#WL=2000;WS=500;WN=500;                                                 # assign window parameters
+##WL=4000;WS=1000; WN=2000; 
 
 NrSyst=7;                                                              # 7 coupled systems
 ROS=[[0  0 2];                                                         # single Roessler system
@@ -12,18 +15,18 @@ ROS=[[0  0 2];                                                         # single 
 (MOD_nr,DIM,ODEorder,P) = make_MOD_nr(ROS,NrSyst);                     # encoding of the 7 Roessler systems
                                                                        # function defined in DDAfunctions.jl
 
-a123=0.21;                                                             # model parameters
-a456=0.20;
-a7  =0.18;
-b1 = 0.2150;
-b2 = 0.2020; 
-b3 = 0.2041; 
-b4 = 0.4050; 
-b5 = 0.3991; 
-b6 = 0.4100; 
-b7 = 0.5000;
-c =5.7;
-c7=6.8;
+a123= 0.21;                                                             # model parameters
+a456= 0.20;
+a7  = 0.18;
+b1  = 0.2150;
+b2  = 0.2020; 
+b3  = 0.2041; 
+b4  = 0.4050; 
+b5  = 0.3991; 
+b6  = 0.4100; 
+b7  = 0.5000;
+c   = 5.7;
+c7  = 6.8;
 MOD_par=[
          -1 -1 1 a123  b1 -c  1 
          -1 -1 1 a123  b2 -c  1
@@ -53,9 +56,8 @@ epsilon=0.15;                                                          # couplin
 MOD_par_add_23=[epsilon -epsilon epsilon -epsilon epsilon -epsilon];   # MOD_par for coupling part
 
 TAU=[32 9]; TM=maximum(TAU); dm=4;                                     # DDA parameters
-WL=2000;WS=500; 
 
-WN=500;                                                                # assign window number for each case
+
 L1=WS*(WN-1)+WL+TM+dm;                                                 # ajust integration length to have 
 L2=WS*WN;                                                              # equal number of windows for each case
 L3=WS*WN+dm;
@@ -100,17 +102,21 @@ SG = plot(layout = (3,7),size=(2100,800));                             # make pl
 for k1=1:3
     for k2=1:7
         plot!(SG,subplot=(k1-1)*7+k2,
-              X[((50000:54000) .+ (k1-1)*L2),k2],
-              X[((50000:54000) .+ (k1-1)*L2) .- 10,k2],
+              X[((20000:24000) .+ (k1-1)*L2),k2],
+              X[((20000:24000) .+ (k1-1)*L2) .- 10,k2],
               legend=false
              )
         end
     end
 display(SG)
-savefig("Roessler_7syst_NoNoise.pdf")
 
-FN="CD_DDA_data_NoNoise.ascii";                                        # noise free data file
-writedlm(FN, map(number_to_string, X),' '); 
+dir_exist("PDFs");
+savefig("PDFs/Roessler_7syst_NoNoise.pdf")
+
+dir_exist("CD_DDA");
+FN=@sprintf("CD_DDA/CD_DDA_data_NoNoise__WL%d_WS%d_WN%d.ascii",
+             WL,WS,WN);                                                # noise free data file
+writedlm(FN, map(number_to_string, X),' ');                            # save data  
 
 ###  add noise  ###
 
@@ -128,16 +134,16 @@ SG = plot(layout = (3,7),size=(2100,800));                             # make pl
 for k1=1:3
     for k2=1:7
         plot!(SG,subplot=(k1-1)*7+k2,
-              Y[((50000:54000) .+ (k1-1)*L2),k2],
-              Y[((50000:54000) .+ (k1-1)*L2) .- 10,k2],
+              Y[((10000:14000) .+ (k1-1)*L2),k2],
+              Y[((10000:14000) .+ (k1-1)*L2) .- 10,k2],
               legend=false
              )
         end
     end
 display(SG)
-savefig("Roessler_7syst_15dB.pdf")
+savefig("PDFs/Roessler_7syst_15dB.pdf")
 
-FN="CD_DDA_data_15dB.ascii";  
+FN=@sprintf("CD_DDA/CD_DDA_data_15dB__WL%d_WS%d_WN%d.ascii",WL,WS,WN);
 writedlm(FN, map(number_to_string, Y),' ');                            # save data 
 
 Y = nothing; GC.gc();
