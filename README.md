@@ -8,15 +8,20 @@ Use it at your own risk.
 Do not forget to chmod for the executables:
 
 chmod +x i_ODE_general_BIG
+
 chmod +x run_DDA_ASCII
 
 
-Single_Roessler_Example.jl   is an example on how to integrate a single Roessler system
+Single_Roessler_Example.jl:   is an example on how to integrate a single Roessler system
 
-run_all_in_paper.jl          does all computations in the paper
-make_data_7_systems.jl       makes the data used in the paper 
-run_DDA_NoNoise.jl           reproduces the analysis of noise free data 
-run_DDA_15dB.jl              reproduces the analysis data with added white noise 
+run_all_in_paper.jl:          does all computations in the paper
+
+make_data_7_systems.jl:       makes the data used in the paper 
+
+run_DDA_NoNoise.jl:           reproduces the analysis of noise free data 
+
+run_DDA_15dB.jl:              reproduces the analysis data with added white noise 
+
 
 
 In case you want to try the software on other data:
