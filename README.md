@@ -5,11 +5,7 @@ It was tested on linux and julia 1.10.1 (https://julialang.org/).
 Use it at your own risk.
 
 
-Do not forget to chmod for the executables:
-
-chmod +x i_ODE_general_BIG
-
-chmod +x run_DDA_ASCII
+julia_first_setup.jl:  run this first!
 
 
 Single_Roessler_Example.jl:   is an example on how to integrate a single Roessler system
