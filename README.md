@@ -12,12 +12,6 @@ Single_Roessler_Example.jl:   is an example on how to integrate a single Roessle
 
 run_all_in_paper.jl:          does all computations in the paper
 
-make_data_7_systems.jl:       makes the data used in the paper 
-
-run_DDA_NoNoise.jl:           reproduces the analysis of noise free data 
-
-run_DDA_15dB.jl:              reproduces the analysis data with added white noise 
-
 
 
 In case you want to try the software on other data:
