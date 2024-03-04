@@ -27,6 +27,11 @@ plot(X[:,1],X[:,2],X[:,3],                                             # plot th
      xlabel=L"x",ylabel=L"y",zlabel=L"z")
 
 plot!(size=(500,500))  
+
+display(current());
+print("Make pdf file and continue? ");
+readline()
+
 savefig("Roessler_0.45.pdf")
 
 b=1; 
@@ -38,4 +43,9 @@ plot(X[:,1],X[:,2],X[:,3],                                             # plot th
      color=:blue,legend=false,
      xlabel=L"x",ylabel=L"y",zlabel=L"z")
 plot!(size=(500,500))
+
+display(current());
+print("Make pdf file and continue? ");
+readline()
+
 savefig("Roessler_1.pdf")
