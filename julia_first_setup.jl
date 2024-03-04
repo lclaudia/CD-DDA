@@ -35,12 +35,16 @@ if Sys.isapple()
 
    if unm == "arm64"
       run(`cp i_ODE_general_BIG.arm64 i_ODE_general_BIG`);
+      run(`cp run_DDA_ASCII.arm64 run_DDA_ASCII`);
    end
 
    if unm == "x86_64"
       run(`cp i_ODE_general_BIG.x86_64 i_ODE_general_BIG`);
+      run(`cp run_DDA_ASCII.x86_64 run_DDA_ASCII`);
    end
 
+   run(`chmod +x i_ODE_general_BIG`);
+   run(`chmod +x run_DDA_ASCII`);
 end
 
 
