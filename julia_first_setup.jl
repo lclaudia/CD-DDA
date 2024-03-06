@@ -24,7 +24,7 @@ if Sys.islinux()
    run(`cp i_ODE_general_BIG.linux64 i_ODE_general_BIG`);
    run(`chmod +x i_ODE_general_BIG`);
 
-   run(`cp run_DDA_ASCII.linux run_DDA_ASCII`);
+   run(`cp run_DDA_ASCII.linux64 run_DDA_ASCII`);
    run(`chmod +x run_DDA_ASCII`);
 
 end
