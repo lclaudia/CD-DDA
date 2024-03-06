@@ -1,3 +1,5 @@
+include("julia_first_setup.jl");                                      # packages and OS specific settings
+
 include("DDAfunctions.jl");                                            # set of Julia functions
 
 WL=2000;WS=500;WN=500;                                                 # assign window parameters
