@@ -156,6 +156,7 @@ N=reshape(1:NrSyst^2,NrSyst,NrSyst);
 k=[N[i, i] for i in 1:NrSyst];
 N=(1:NrSyst^2)[setdiff(1:NrSyst^2,k)];
 S=collect(permutations(CH,2));
+S=reduce(hcat,S)';
 S=[join(string.(x), " ") for x in eachrow(S)];
 
 heatmap!(SG,subplot=1,
@@ -284,27 +285,6 @@ savefig(@sprintf("PDFs/CD_DDA_CE_15dB__WL%d_WS%d_WN%d.pdf",WL,WS,WN))
 
 ###
 
-C[isnan.(C)] .= 0;
-C=C./maximum(C[:]);
-C=permutedims(C,[1,4,2,3]);
-C=reshape(C,WN*3,NrCH,NrCH);
-
-WLsvd=100; WSsvd=1;
-WNsvd=Int(1+floor((size(C,1)-WLsvd)/(WSsvd)));
-
-UU=fill(NaN,WNsvd,NrCH^2); SS=fill(NaN,WNsvd);
-for wn=1:WNsvd
-    (u,s,v)=svd(reshape(C[(1:WLsvd) .+ (wn-1)*WSsvd,:,:],WLsvd,NrCH^2)');
-    UU[wn,:]=u[:,1];
-    SS[wn]=s[1,1]; 
-end
-
-t=collect(1:WNsvd) .+ WLsvd;
-
-plot(t,SS,label=L"{\cal C}",xticks=(WN:WN:2*WN),legendfontsize=18)
-
-###
-
 CE[isnan.(CE)] .= 0;
 CE=CE./maximum(CE[:]);
 CE=permutedims(CE,[1,4,2,3]);
@@ -322,7 +302,28 @@ end
 
 t=collect(1:WNsvd) .+ WLsvd;
 
-plot!(t,SS,label=L"{\cal C} \star {\cal E}",xticks=(WN:WN:2*WN),legendfontsize=18)
+l=@layout[a{0.7h} ; b];                                            # plot results
+SG = plot(layout = l,size=(1000,1000));
+CG= cgrad([:white, RGB(1,0.97,0.86), RGB(0.55,0.27,0.07)],
+          [0,0.1],scale=:linear);
+
+heatmap!(SG,subplot=1,
+         UU[:,N]',
+         c=CG,
+         xtickfont=font(12), ytickfont=font(12),
+         colorbar = false,
+         yticks=(1:length(S),S),
+         xticks=(100," ")
+         ) 
+
+plot!(SG,subplot=2,
+      t,SS,
+      label=L"{\cal C} \star {\cal E}",
+      xticks=(WN:WN:2*WN),
+      xtickfont=font(12), ytickfont=font(12),
+      legendfontsize=18)
+      
+display(SG)
 
 print("Make pdf file and continue? ");
 readline()
