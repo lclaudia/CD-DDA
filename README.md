@@ -4,6 +4,7 @@ It was tested on linux and mac with julia 1.10.2 (https://julialang.org/).
 
 Use it at your own risk.
 
+See README.pdf for a detailed description.
 
 julia_first_setup.jl:  run this first!
 
