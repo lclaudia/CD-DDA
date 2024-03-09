@@ -1,6 +1,6 @@
 This software reproduces the Roessler part of ``Network-motif delay differential analysis of brain activity during seizures", Chaos 33(12):123136; 2023. https://doi.org/10.1063/5.0165904
 
-It was tested on linux and julia 1.10.1 (https://julialang.org/).
+It was tested on linux and julia 1.10.2 (https://julialang.org/).
 
 Use it at your own risk.
 
