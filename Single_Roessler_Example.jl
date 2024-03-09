@@ -1,3 +1,5 @@
+include("julia_first_setup.jl");                                      # packages and OS specific settings
+
 include("DDAfunctions.jl");                                           # set of Julia functions
 
 NrSyst=1;                                                             # 1 single system
