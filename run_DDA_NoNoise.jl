@@ -58,7 +58,7 @@ CT=CT[:,L_AF:L_AF:end];                                                # need on
 CT=reshape(CT,WN,3,size(LIST,1));                                      # reshape matrix: 3 cases,  
                                                                        #    length(LIST) combinations
 
-E=fill(NaN,WN,7,7,3);                                                  # dynamical ergodicity matrix
+E=fill(NaN,WN,NrSyst,NrSyst,3);                                        # dynamical ergodicity matrix
 for l=1:size(LIST,1)
     ch1=LIST[l,1];ch2=LIST[l,2];
     E[:,ch1,ch2,:] = abs.( dropdims(mean(ST[:,:,[ch1,ch2]],dims=3),dims=3) ./ CT[:,:,l] .- 1 );
@@ -131,7 +131,7 @@ CD=CD[:,3:end];                                                        # first 2
 CD=reshape(CD,WN,3,2,size(LIST,1));                                    # reshape matrix: 3 cases,  
                                                                        #    length(LIST) combinations
 
-C=fill(NaN,WN,7,7,3);                                                  # causality matrix
+C=fill(NaN,WN,NrSyst,NrSyst,3);                                        # causality matrix
 for l=1:size(LIST,1)
     ch1=LIST[l,1];ch2=LIST[l,2];
     C[:,ch1,ch2,:] = CD[:,:,2,l];
@@ -156,6 +156,7 @@ N=reshape(1:NrSyst^2,NrSyst,NrSyst);
 k=[N[i, i] for i in 1:NrSyst];
 N=(1:NrSyst^2)[setdiff(1:NrSyst^2,k)];
 S=collect(permutations(CH,2));
+S=reduce(hcat,S)';
 S=[join(string.(x), " ") for x in eachrow(S)];
 
 heatmap!(SG,subplot=1,
@@ -301,7 +302,17 @@ end
 
 t=collect(1:WNsvd) .+ WLsvd;
 
-plot(t,SS,label=L"{\cal C}",xticks=(WN:WN:2*WN),legendfontsize=18)
+l=@layout[a{0.7h} ; b];                                            # plot results
+SG = plot(layout = l,size=(1000,1000));
+CG= cgrad([:white, RGB(1,0.97,0.86), RGB(0.55,0.27,0.07)],
+          [0,0.1],scale=:linear);
+
+plot!(SG,subplot=2,
+      t,SS,
+      label=L"{\cal C}",
+      xticks=(WN:WN:2*WN),
+      xtickfont=font(12), ytickfont=font(12),
+      legendfontsize=18)
 
 ###
 
@@ -322,7 +333,23 @@ end
 
 t=collect(1:WNsvd) .+ WLsvd;
 
-plot!(t,SS,label=L"{\cal C} \star {\cal E}",xticks=(WN:WN:2*WN),legendfontsize=18)
+heatmap!(SG,subplot=1,
+         UU[:,N]',
+         c=CG,
+         xtickfont=font(12), ytickfont=font(12),
+         colorbar = false,
+         yticks=(1:length(S),S),
+         xticks=(100," ")
+         ) 
+
+plot!(SG,subplot=2,
+      t,SS,
+      label=L"{\cal C} \star {\cal E}",
+      xticks=(WN:WN:2*WN),
+      xtickfont=font(12), ytickfont=font(12),
+      legendfontsize=18)
+      
+display(SG)
 
 print("Make pdf file and continue? ");
 readline()
