@@ -13,6 +13,14 @@ using Graphs
 using GraphRecipes
 using Colors
 
+
+
+if Sys.iswindows()
+   SL="\\";
+else
+   SL="/";
+end
+
 function dir_exist(DIR)
     if !isdir(DIR)
         mkdir(DIR)
@@ -23,32 +31,57 @@ function number_to_string(n::Number)
    return @sprintf("%.15f", n);
 end
 
-function integrate_ODE_general_BIG(MOD_nr,MOD_par,dt,L,DIM,order,X0,TRANS=nothing)
-
+function integrate_ODE_general_BIG(MOD_nr,MOD_par,dt,L,DIM,ODEorder,X0,FNout,CH_list,DELTA,TRANS=nothing)
   if TRANS===nothing
      TRANS=0;
   end
 
-  CMD="./i_ODE_general_BIG";
+  if Sys.iswindows()
+     if !isfile("i_ODE_general_BIG.exe")
+        cp("i_ODE_general_BIG","i_ODE_general_BIG.exe");
+     end
+
+     CMD=".\\i_ODE_general_BIG.exe";
+  else
+     CMD="./i_ODE_general_BIG";
+  end
+
   MOD_NR = join(MOD_nr, " ");
   CMD = "$CMD -MODEL $MOD_NR";
   MOD_PAR = join(MOD_par, " ");
   CMD = "$CMD -PAR $MOD_PAR";
   ANF=join(X0," ");
   CMD = "$CMD -ANF $ANF";
-  CMD = "$CMD -dt $(string(dt))";
-  CMD = "$CMD -L $(string(L))";
-  CMD = "$CMD -DIM $(string(DIM))";
-  CMD = "$CMD -order $(string(order))";
+  CMD = "$CMD -dt $dt";
+  CMD = "$CMD -L $L";
+  CMD = "$CMD -DIM $DIM";
+  CMD = "$CMD -order $ODEorder";
   if TRANS>0
-     CMD = "$CMD -TRANS $(string(TRANS))";
+     CMD = "$CMD -TRANS $TRANS";
   end
+  if length(FNout)>0
+     CMD = "$CMD -FILE $FNout";
+  end
+  CMD = "$CMD -DELTA $DELTA";
+  CMD = "$CMD -CH_list $(join(CH_list," "))";
 
-  X=readchomp(Cmd(string.(split(CMD, " "))));
-  X = split(strip(X), '\n');
-  X = hcat([parse.(Float64, split(row)) for row in X]...)';
+  if length(FNout)>0
+     if Sys.iswindows()
+        run(Cmd(string.(split(CMD, " "))));
+     else
+        run(`sh -c $CMD`);
+     end
+  else
+     if Sys.iswindows()
+       X = read(Cmd(string.(split(CMD, " "))),String);
+     else
+       X = read(`sh -c $CMD`,String);
+     end
+     X = split(strip(X), '\n');
+     X = hcat([parse.(Float64, split(row)) for row in X]...)';
 
-  return X
+     return X
+  end
 end
 
 function index(DIM, ORDER)
